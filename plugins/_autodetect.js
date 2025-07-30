@@ -28,7 +28,7 @@ export async function before(m, { conn, participants}) {
   } else if (chat.detect && m.messageStubType == 21) {
     await this.sendMessage(m.chat, { text: `${usuario} \`𝐇𝐀 𝐂𝐀𝐌𝐁𝐈𝐀𝐃𝐎 𝐄𝐋 𝐍𝐎𝐌𝐁𝐑𝐄 𝐃𝐄𝐋 𝐆𝐑𝐔𝐏𝐎 𝐀:\`\n\n> *${m.messageStubParameters[0]}*`, mentions: [m.sender], mentions: [...groupAdmins.map(v => v.id)] }, { quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
   } else if (chat.detect && m.messageStubType == 22) {
-    await this.sendMessage(m.chat, { text: `𝙇𝘼 𝙁𝙊𝙏𝙊 𝘿𝙀𝙇 𝙂𝙍𝙐𝙋𝙊 𝘼𝙃 𝙎𝙄𝘿𝙊 𝘾𝘼𝙈𝘽𝙄𝘼𝘿𝘼 𝙋𝙊𝙍:  ${usuario}\``, mentions: [m.sender] }, { quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}) 
+    await this.sendMessage(m.chat, { text: `𝙇𝘼 𝙁𝙊𝙏𝙊 𝘿𝙀𝙇 𝙂𝙍𝙐𝙋𝙊 𝘼𝙃 𝙎𝙄𝘿𝙊 𝘾𝘼𝙈𝘽𝙄𝘼𝘿𝘼 𝙋𝙊𝙍:  ${usuario}\`, mentions: [m.sender] }, { quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}) 
   } else if (chat.detect && m.messageStubType == 24) {
     await this.sendMessage(m.chat, { 
   text: `𝙇𝘼 𝘿𝙀𝙎𝘾𝙍𝙄𝙋𝘾𝙄𝙊𝙉 𝘼𝙃 𝙎𝙄𝘿𝙊 𝘾𝘼𝙈𝘽𝙄𝘼𝘿𝘼 𝙋𝙊𝙍:  ${usuario}`, 
