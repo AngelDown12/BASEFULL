@@ -1,63 +1,66 @@
 import FormData from "form-data"
 import Jimp from "jimp"
-import uploadImage from '../../lib/uploadImage.js'
-import fetch from "node-fetch"
 
-const handler = async (m, { conn, usedPrefix, command }) => {
-  try {
-    let q = m.quoted ? m.quoted : m
-    let mime = (q.msg || q).mimetype || q.mediaType || ""
+const handler = async (m, {conn, usedPrefix, command}) => {
+try {    
+let q = m.quoted ? m.quoted : m
+let mime = (q.msg || q).mimetype || q.mediaType || ""
 
-    if (!mime) {
-      return m.reply(`❀ Por favor, envie una imagen o responda a la imagen utilizando el comando.`)
-    }
+if (!mime.startsWith('image')) return m.reply(`⚠️ 𝐑𝐞𝐬𝐩𝐨𝐧𝐝𝐞 𝐚 𝐮𝐧𝐚 𝐢𝐦𝐚𝐠𝐞𝐧!`)
+await m.react('⌛')
 
-    if (!/image\/(jpe?g|png)/.test(mime)) {
-      return m.reply(`✧ El formato del archivo (${mime}) no es compatible, envía o responde a una imagen.`)
-    }
+let img = await q.download?.()
+if (!img) return m.reply(`⚠️ No se pudo descargar la imagen. Por favor intenta nuevamente.`)
+let pr = await remini(img, "enhance")
 
-    conn.reply(m.chat, '*🚀 P R O C E S A N D O*', m)
-    let imgBuffer = await q.download()
-    let image = await Jimp.read(imgBuffer)
-    image.resize(800, Jimp.AUTO)
-    let processedImageBuffer = await image.getBufferAsync(Jimp.MIME_JPEG)
-
-    let imageUrl = await uploadImage(processedImageBuffer)
-    let enhancedImageUrl = await enhanceImage(imageUrl)
-
-    await conn.sendFile(m.chat, enhancedImageUrl, "out.png", "", fkontak)
-  } catch (error) {
-    return conn.reply(m.chat, `⚠︎ Ocurrió un error: ${error.message}`, m)
-  }
-}
-
+if (!pr) return m.reply(`⚠️ Hubo un problema al procesar la imagen. Intenta nuevamente más tarde.`)
+await conn.sendFile(m.chat, pr, 'thumbnail.jpg', "*Aqui tiene sus imagen en HD*", m)
+await m.react('✅')
+} catch (e) {
+handler.limit = 0
+await m.react('❌')
+console.error(e)
+m.reply(`⚠️ Ocurrió un error: ${e.message}`)
+}}
 handler.help = ["hd"]
 handler.tags = ["tools"]
 handler.command = ["remini", "hd", "enhance"]
-handler.group = true
-
+handler.register = true 
+handler.limit = 1
 export default handler
 
-async function enhanceImage(imageUrl) {
-  try {
-    const response = await fetch(
-      `https://api.siputzx.my.id/api/iloveimg/upscale?image=${encodeURIComponent(imageUrl)}`,
-      {
-        method: "GET"
-      }
-    )
-
-    if (!response.ok) {
-      throw new Error(
-        `Error al procesar la imagen: ${response.status} - ${response.statusText}`
-      )
+async function remini(imageData, operation) {
+  return new Promise(async (resolve, reject) => {
+    const availableOperations = ["enhance", "recolor", "dehaze"]
+    if (!availableOperations.includes(operation)) {
+      operation = availableOperations[0]
     }
 
-    const result = await response.buffer()
-    return result
-  } catch (error) {
-    throw new Error(
-      `Error al mejorar la calidad de la imagen: ${error.message}`
-    )
-  }
+    const baseUrl = "https://inferenceengine.vyro.ai/" + operation + ".vyro"
+    const formData = new FormData()
+    formData.append("image", Buffer.from(imageData), {filename: "enhance_image_body.jpg", contentType: "image/jpeg"})
+    formData.append("model_version", 1, {"Content-Transfer-Encoding": "binary", contentType: "multipart/form-data; charset=utf-8"})
+
+    formData.submit({
+      url: baseUrl,
+      host: "inferenceengine.vyro.ai",
+      path: "/" + operation,
+      protocol: "https:",
+      headers: {
+        "User-Agent": "okhttp/4.9.3",
+        "Connection": "Keep-Alive",
+        "Accept-Encoding": "gzip"
+      }
+    }, function (err, res) {
+      if (err) {
+        reject(new Error(`Error en la solicitud a la API: ${err.message}`))
+      }
+      const chunks = []
+      res.on("data", function (chunk) { chunks.push(chunk) })
+      res.on("end", function () { resolve(Buffer.concat(chunks)) })
+      res.on("error", function (err) {
+        reject(new Error(`Error al recibir la respuesta: ${err.message}`))
+      })
+    })
+  })
 }
