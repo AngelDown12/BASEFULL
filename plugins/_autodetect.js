@@ -31,7 +31,7 @@ export async function before(m, { conn, participants}) {
     await this.sendMessage(m.chat, { text: `𝙇𝘼 𝙁𝙊𝙏𝙊 𝘿𝙀𝙇 𝙂𝙍𝙐𝙋𝙊 𝘼𝙃 𝙎𝙄𝘿𝙊 𝘾𝘼𝙈𝘽𝙄𝘼𝘿𝘼 𝙋𝙊𝙍: ${usuario}\`, mentions: [m.sender] }, { quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}) 
   } else if (chat.detect && m.messageStubType == 24) {
         await this.sendMessage(m.chat, { 
-  text: `𝙇𝘼 𝘿𝙀𝙎𝘾𝙍𝙄𝙋𝘾𝙄𝙊𝙉 𝘼𝙃 𝙎𝙄𝘿𝙊 𝘾𝘼𝙈𝘽𝙄𝘼𝘿𝘼 𝙋𝙊𝙍: ${usuario}`, 
+  text: `𝙇𝘼 𝘿𝙀𝙎𝘾𝙍𝙄𝙋𝘾𝙄𝙊𝙉 𝘼𝙃 𝙎𝙄𝘿𝙊 𝘾𝘼𝙈𝘽𝙄𝘼𝘿𝘼 𝙋𝙊𝙍: ${usuario}\`, 
   mentions: [m.sender] 
 }, { quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
   } else if (chat.detect && m.messageStubType == 25) {
