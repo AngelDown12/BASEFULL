@@ -1,40 +1,80 @@
-let mutedUsers = new Set(); // Almacena los usuarios muteados
+import fetch from 'node-fetch';
 
-let handler = async (m, { conn, usedPrefix, command, isAdmin, isBotAdmin }) => {
-    if (!isBotAdmin) return conn.reply(m.chat, '⭐ El bot necesita ser administrador.', m);
-    if (!isAdmin) return conn.reply(m.chat, '⭐ Solo los administradores pueden usar este comando.', m);
+const handler = async (m, { conn, command, text }) => {
+  let userToMute =
+    m.mentionedJid?.[0] ||
+    m.quoted?.sender ||
+    text;
 
-    let user;
-    if (m.quoted) {
-        user = m.quoted.sender;
-    } else {
-        return conn.reply(m.chat, '⭐ Responde al mensaje del usuario que quieres mutear.', m);
-    }
+  if (!userToMute) {
+    return conn.reply(m.chat, command === 'mute'
+      ? '╰⊱❗️⊱ *Menciona a la persona que deseas mutar* ⊱❗️⊱'
+      : '╰⊱❗️⊱ *Menciona a la persona que deseas demutar* ⊱❗️⊱╮', m);
+  }
 
-    if (command === "mute") {
-        mutedUsers.add(user);
-        conn.reply(m.chat, `✅ *Usuario muteado:* @${user.split('@')[0]}`, m, { mentions: [user] });
-    } else if (command === "unmute") {
-        mutedUsers.delete(user);
-        conn.reply(m.chat, `✅ *Usuario desmuteado:* @${user.split('@')[0]}`, m, { mentions: [user] });
-    }
-};
+  const botNumber = conn.user.jid;
+  const groupMetadata = await conn.groupMetadata(m.chat);
+  const groupOwner = groupMetadata.owner || groupMetadata.id.split('-')[0] + '@s.whatsapp.net';
 
-handler.before = async (m, { conn }) => {
-    if (mutedUsers.has(m.sender) && m.mtype !== 'stickerMessage') {
-        try {
-            await conn.sendMessage(m.chat, { delete: m.key });
-        } catch (e) {
-            console.error(e);
+  if (userToMute === groupOwner)
+    throw '❌️ *No puedes mutar el creador del grupo*';
+
+  if (userToMute === botNumber)
+    throw '❌️ *No puedes mutar el bot*';
+
+  if (userToMute === global.owner[0][0] + '@s.whatsapp.net')
+    throw '😼 *El creador del bot no puede ser mutado*';
+
+  const userData = global.db.data.users[userToMute];
+
+  if (command === 'mute') {
+    if (userData.muto === true) throw '😼 *Este usuario ya ha sido mutado*';
+
+    const fakeContact = {
+      key: {
+        participants: '0@s.whatsapp.net',
+        fromMe: false,
+        id: 'Halo'
+      },
+      message: {
+        locationMessage: {
+          name: '𝗨𝘀𝘂𝗮𝗿𝗶𝗼 mutado',
+          jpegThumbnail: await (await fetch('https://telegra.ph/file/f8324d9798fa2ed2317bc.png')).buffer(),
+          vcard: 'BEGIN:VCARD\nVERSION:3.0\nN:;Unlimited;;;\nFN:Unlimited\nORG:Unlimited\nTITLE:\nitem1.TEL;waid=19709001746:+1 (970) 900-1746\nitem1.X-ABLabel:Unlimited\nX-WA-BIZ-DESCRIPTION:ofc\nX-WA-BIZ-NAME:Unlimited\nEND:VCARD'
         }
-    }
+      },
+      participant: '0@s.whatsapp.net'
+    };
+
+    userData.muto = true;
+    conn.reply(m.chat, '*Tus mensajes serán eliminados*', fakeContact, null, { mentions: [userToMute] });
+  }
+
+  if (command === 'unmute') {
+    if (userData.muto === false) throw '😼 *Este usuario no ha sido mutado*';
+
+    const fakeContact = {
+      key: {
+        participants: '0@s.whatsapp.net',
+        fromMe: false,
+        id: 'Halo'
+      },
+      message: {
+        locationMessage: {
+          name: '𝗨𝘀𝘂𝗮𝗿𝗶𝗼 demutado',
+          jpegThumbnail: await (await fetch('https://telegra.ph/file/aea704d0b242b8c41bf15.png')).buffer(),
+          vcard: 'BEGIN:VCARD\nVERSION:3.0\nN:;Unlimited;;;\nFN:Unlimited\nORG:Unlimited\nTITLE:\nitem1.TEL;waid=19709001746:+1 (970) 900-1746\nitem1.X-ABLabel:Unlimited\nX-WA-BIZ-DESCRIPTION:ofc\nX-WA-BIZ-NAME:Unlimited\nEND:VCARD'
+        }
+      },
+      participant: '0@s.whatsapp.net'
+    };
+
+    userData.muto = false;
+    conn.reply(m.chat, '*Tus mensajes no serán eliminados*', fakeContact, null, { mentions: [userToMute] });
+  }
 };
 
-handler.help = ['mute', 'unmute'];
-handler.tags = ['group'];
 handler.command = /^(mute|unmute)$/i;
 handler.group = true;
-handler.admin = true;
-handler.botAdmin = true;
 
 export default handler;
