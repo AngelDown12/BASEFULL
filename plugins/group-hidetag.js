@@ -44,6 +44,6 @@ await conn.relayMessage(m.chat, {extendedTextMessage:{text: `${htextos}`, ...{ c
 
 }
 
-handler.command = /^(hidetag|notificar|notify|viso|aviso)$/i
+handler.command = /^(n|notificar|notify|viso|aviso)$/i
 handler.group = true
 export default handler
