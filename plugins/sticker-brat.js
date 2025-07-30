@@ -1,45 +1,46 @@
-import { sticker } from '../lib/sticker.js'
-import fetch from 'node-fetch'
-import { db } from '../lib/postgres.js';
-let handler = async(m, { conn, text, args, usedPrefix, command }) => {
-const userResult = await db.query('SELECT sticker_packname, sticker_author FROM usuarios WHERE id = $1', [m.sender]);
-const user = userResult.rows[0] || {};
-let f = user.sticker_packname || global.info.packname;
-let g = (user.sticker_packname && user.sticker_author ? user.sticker_author : (user.sticker_packname && !user.sticker_author ? '' : global.info.author));
-if (!text) return m.reply(`⚠️ 𝙀𝙨𝙘𝙧𝙞𝙗𝙖 𝙥𝙖𝙧𝙖 𝙦𝙪𝙚 𝙚𝙡 𝙩𝙚𝙭𝙩𝙤 𝙨𝙚 𝙘𝙤𝙣𝙫𝙞𝙚𝙧𝙩𝙖 𝙚𝙡 𝙨𝙩𝙞𝙘𝙠𝙚𝙧\n𝙀𝙟𝙚𝙢𝙥𝙡𝙤\n*${usedPrefix + command}* Nuevo Sticker`)
-let teks = encodeURI(text)
-conn.fakeReply(m.chat, `Calma crack estoy haciendo tu texto a sticker 👏\n\n> *Esto puede demorar unos minutos*`, '0@s.whatsapp.net', `No haga spam gil`, 'status@broadcast')
 
-if (command == 'attp') {
-if (text.length > 40) return m.reply(`⚠️ El texto no puede tener más de 40 caracteres.\n\n✍️ Intenta con algo más corto.`)
-//let stiker = await sticker(null,`${info.fgmods.url}/maker/attp?text=${teks}&apikey=${info.fgmods.key}`, f, g)
-let res = await fetch(`https://api.neoxr.eu/api/attp?text=${teks}%21&color=%5B%22%23FF0000%22%2C+%22%2300FF00%22%2C+%22%230000FF%22%5D&apikey=GataDios`)
-let json = await res.json()
-if (!json.status) return m.reply('Ufff la puta api se cayo 😒 pura mamada vuelve intentarlo mas tarde')
-let stiker = await sticker(null, json.data.url, f, g)
-conn.sendFile(m.chat, stiker, 'sticker.webp', '',m, true, { contextInfo: { 'forwardingScore': 200, 'isForwarded': false, externalAdReply:{ showAdAttribution: false, title: info.wm, body: info.vs, mediaType: 2, sourceUrl: info.md, thumbnail: m.pp}}}, { quoted: m })
-}
+import fetch from 'node-fetch';
 
-if (command == 'ttp' || command == 'brat') {
-if (text.length > 300) return m.reply(`⚠️ El texto no puede tener más de 300 caracteres.\n\n✍️ Intenta con algo más corto.`)
-let res = await fetch(`https://api.neoxr.eu/api/brat?text=${teks}&apikey=GataDios`)
-let json = await res.json()
-if (!json.status) return m.reply('Ufff la puta api se cayo 😒 pura mamada vuelve intentarlo mas tarde')
-let stiker = await sticker(null, json.data.url, f, g)
-conn.sendFile(m.chat, stiker, 'sticker.webp', '',m, true, { contextInfo: { 'forwardingScore': 200, 'isForwarded': false, externalAdReply:{ showAdAttribution: false, title: info.wm, body: info.vs, mediaType: 2, sourceUrl: info.md, thumbnail: m.pp}}}, { quoted: m })
-}
+const handler = async (m, { conn, args, usedPrefix, command }) => {
+    try {
+        if (!args[0]) {
+            return conn.reply(m.chat, 
+                `> 𝘗𝘰𝘳 𝘧𝘢𝘷𝘰𝘳 𝘪𝘯𝘨𝘳𝘦𝘴𝘢 𝘦𝘭 𝘵𝘦𝘹𝘵𝘰 𝘲𝘶𝘦 𝘥𝘦𝘴𝘦𝘢𝘴 𝘤𝘰𝘯𝘷𝘦𝘳𝘵𝘪𝘳 𝘦𝘯 𝘴𝘵𝘪𝘤𝘬𝘦𝘳.\n\n𝘌𝘫𝘦𝘮𝘱𝘭𝘰: ${usedPrefix}brat 𝘩𝘰𝘭𝘢 𝘣𝘰𝘭𝘢.`, 
+                m);
+        }
 
-if (command == 'brat2' || command == 'bratvid') {
-if (text.length > 250) return m.reply(`⚠️ El texto no puede tener más de 250 caracteres.\n\n✍️ Intenta con algo más corto.`)
-let res = await fetch(`https://api.neoxr.eu/api/bratvid?text=${teks}&apikey=GataDios`)
-let json = await res.json()
-if (!json.status) return m.reply('Ufff la puta api se cayo 😒 pura mamada vuelve intentarlo mas tarde')
-let stiker = await sticker(null, json.data.url, f, g)
-conn.sendFile(m.chat, stiker, 'sticker.webp', '', m, true, { contextInfo: { 'forwardingScore': 200, 'isForwarded': false, externalAdReply: { showAdAttribution: false, title: info.wm, body: info.vs, mediaType: 2, sourceUrl: info.md, thumbnail: m.pp }}}, { quoted: m })
-}
-}
-handler.help = ['attp', 'brat', 'bratvid'];
-handler.tags = ['sticker']
-handler.command = /^(attp|ttp|ttp2|ttp3|ttp4|attp2|brat|brat2|bratvid)$/i
-handler.register = false
-export default handler
+        const text = encodeURIComponent(args.join(" "));
+        const apiUrl = `https://api.siputzx.my.id/api/m/brat?text=${text}`;
+
+        // Reacción de espera
+        await conn.sendMessage(m.chat, { react: { text: '⏳', key: m.key } });
+
+        // Obtener el sticker
+        const stickerResponse = await fetch(apiUrl);
+        if (!stickerResponse.ok) throw new Error('Error al generar el sticker');
+
+        // Enviar el sticker de forma limpia
+        await conn.sendMessage(m.chat, {
+            sticker: { url: apiUrl },
+            packname: 'Barboza',  // Nombre que aparecerá al ver info
+            author: conn.getName(m.sender) // Muestra el nombre del creador
+        }, { quoted: m });
+
+        // Reacción de éxito
+        await conn.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+
+    } catch (err) {
+        console.error(err);
+        // Reacción de error
+        await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        await conn.reply(m.chat, 
+            `> 𝘖𝘤𝘶𝘳𝘳𝘪ó 𝘶𝘯 𝘦𝘳𝘳𝘰𝘳 𝘢𝘭 𝘨𝘦𝘯𝘦𝘳𝘢𝘳 𝘦𝘭 𝘴𝘵𝘪𝘤𝘬𝘦𝘳.\n\n𝘗𝘰𝘳 𝘧𝘢𝘷𝘰𝘳 𝘪𝘯𝘵𝘦𝘯𝘵𝘢 𝘥𝘦 𝘯𝘶𝘦𝘷𝘰.`, 
+            m);
+    }
+};
+
+handler.help = ['brat <texto>'];
+handler.tags = ['sticker'];
+handler.command = /^brat(icker)?$/i;
+
+export default handler;
