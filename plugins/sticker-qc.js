@@ -29,6 +29,7 @@ let text
          "avatar": true,
          "from": {
             "id": 1,
+            "name": m.name,
             "photo": {
                "url": pp
             }
