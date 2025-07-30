@@ -13,7 +13,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     
     if (/webp|image|video/g.test(mime)) {
       let img = await q.download?.()
-      if (!img) return m.reply(`☁️ Responde a una *Imagen* o *Vídeo.*`)
+      if (!img) return m.reply(`☁️ 𝙍𝙀𝙎𝙋𝙊𝙉𝘿𝘼 𝘼𝙇𝘼 𝙄𝙈𝘼𝙂𝙀𝙉 𝙊 𝘼𝙇 𝙑𝙄𝘿𝙀𝙊 𝙋𝘼𝙍𝘼 𝘾𝙍𝙀𝘼𝙍 𝙀𝙇 𝙎𝙏𝙄𝘾𝙆𝙀𝙍`)
       let out
 
       try {
