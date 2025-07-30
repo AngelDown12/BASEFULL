@@ -8,10 +8,15 @@ const handler = async (m, { conn, args }) => {
 ⚠️ Agrega texto para generar el sticker.`)
   }
 
-  // Mensaje de estado "⌛ Generando..."
-  let status = await conn.reply(m.chat, '⌛ Generando tu sticker...', m)
-
   try {
+    // Reacción ⌛ al mensaje original
+    await conn.sendMessage(m.chat, {
+      react: {
+        text: '⌛',
+        key: m.key
+      }
+    })
+
     const url = `https://api.siputzx.my.id/api/m/brat?text=${encodeURIComponent(args.join(' '))}`
     await conn.sendMessage(m.chat, {
       sticker: { url },
@@ -19,7 +24,7 @@ const handler = async (m, { conn, args }) => {
       author: '',
     }, { quoted: m })
 
-    // Reacciona con ✅
+    // Reemplaza ⌛ por ✅
     await conn.sendMessage(m.chat, {
       react: {
         text: '✅',
@@ -29,9 +34,6 @@ const handler = async (m, { conn, args }) => {
   } catch (e) {
     console.error(e)
     conn.reply(m.chat, '❌ Ocurrió un error al generar el sticker.', m)
-  } finally {
-    // Elimina el mensaje temporal si existe
-    if (status?.key) conn.sendMessage(m.chat, { delete: status.key })
   }
 }
 
