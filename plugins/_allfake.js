@@ -7,9 +7,9 @@ let img = catalogo
     contextInfo: {
     	isForwarded: true,
     forwardedNewsletterMessageInfo: {
-      newsletterJid: "120363328554424977@newsletter",
+      newsletterJid: "",
       serverMessageId: 100,
-      newsletterName: '✨Twins bots✨💚❤️🩵',
+      newsletterName: '',
     },
 	    externalAdReply: {
 				    showAdAttribution: true,
@@ -50,9 +50,9 @@ global.rcanal = {
 contextInfo: {
 isForwarded: true,
 forwardedNewsletterMessageInfo: {
-newsletterJid: "120363328554424977@newsletter",
+newsletterJid: "",
 serverMessageId: 100,
-newsletterName: '✨Twins bots✨💚❤️🩵',
+newsletterName: '',
 },
 externalAdReply: { 
 showAdAttribution: true,
