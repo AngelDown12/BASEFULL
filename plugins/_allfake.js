@@ -18,7 +18,7 @@ let img = catalogo
 					mediaUrl: null,
 					description: null,
 					previewType: "PHOTO",
-					thumbnailUrl: 'https://i.ibb.co/4jft6vs/file.jpg',
+					thumbnailUrl: 'https://files.catbox.moe/ntyp5r.jpg',
 		           sourceUrl: canal,
 		           mediaType: 1,
                    renderLargerThumbnail: false
@@ -59,8 +59,8 @@ showAdAttribution: true,
 title: '𝑺𝑶𝑭𝑰 - 𝑩𝑶𝑻',
 body: 'Sofi La Mejor',
 previewType: "PHOTO",
-thumbnailUrl: 'https://i.ibb.co/4jft6vs/file.jpg',
-sourceUrl: 'https://www.instagram.com/josssi_bot.ff',
+thumbnailUrl: 'https://files.catbox.moe/ntyp5r.jpg',
+sourceUrl: '',
 mediaType: 1,
 renderLargerThumbnail: false
 },},}
