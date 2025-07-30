@@ -28,7 +28,7 @@ const handler = async (m, { conn, args }) => {
     })
   } catch (e) {
     console.error(e)
-    conn.reply(m.chat, '❌ Ocurrió un error al generar el sticker.', m)
+    conn.reply(m.chat, '❌ 𝙀𝙍𝙍𝙊𝙍 𝘼𝙇 𝙂𝙀𝙉𝙀𝙍𝘼𝙍 𝙀𝙇 𝙎𝙏𝙄𝘾𝙆𝙀𝙍', m)
   }
 }
 
