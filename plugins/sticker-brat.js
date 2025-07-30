@@ -1,11 +1,6 @@
 const handler = async (m, { conn, args }) => {
   if (!args[0]) {
-    return m.reply(`╰⊱❗️⊱ *𝙐𝙎𝙊 𝙄𝙉𝘾𝙊𝙍𝙍𝙀𝘾𝙏𝙊* ⊱❗️⊱╮
-
-📌 Ejemplo de uso:
-.brat Hola soy brutal 😈
-
-⚠️ Agrega texto para generar el sticker.`)
+    return m.reply(`☁️ 𝘼𝙂𝙍𝙀𝙂𝘼 𝙏𝙀𝙓𝙏𝙊 𝙋𝘼𝙍𝘼 𝙂𝙀𝙉𝙀𝙍𝘼𝙍 𝙀𝙇 𝙎𝙏𝙄𝘾𝙆𝙀𝙍`)
   }
 
   try {
