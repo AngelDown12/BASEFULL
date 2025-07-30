@@ -10,7 +10,7 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
         }
 
         const text = encodeURIComponent(args.join(" "));
-        const apiUrl = `https://api.siputzx.my.id/api/m/brat?text=${text}`;
+        const apiUrl = `https://photooxy-api.vercel.app/api/bratboy?text=Hola`;
 
         // Reacción de espera
         await conn.sendMessage(m.chat, { react: { text: '⏳', key: m.key } });
