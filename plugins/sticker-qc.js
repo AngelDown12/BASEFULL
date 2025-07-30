@@ -57,7 +57,7 @@ let handler = async (m, {
     })
 
     const buffer = Buffer.from(json.data.result.image, 'base64')
-    const stiker = await sticker(buffer, false, global.packname, global.author)
+    const stiker = await sticker(buffer, false, '', '') // sin texto debajo del sticker
 
     if (stiker) return conn.sendFile(m.chat, stiker, 'Quotly.webp', '', m)
 }
