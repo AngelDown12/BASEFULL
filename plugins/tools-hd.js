@@ -49,7 +49,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
     await conn.sendMessage(m.chat, { react: { text: '✅', key: m.key } })
   } catch (err) {
     await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key } })
-    m.reply(`❌ Falló la mejora de imagen:\n${err.message || err}`)
+    m.reply(`❌ 𝙃𝙐𝘽𝙊 𝙐𝙉 𝙀𝙍𝙍𝙊𝙍 𝙄𝙉𝙀𝙎𝙋𝙀𝙍𝘼𝘿𝙊`)
   }
 }
 
