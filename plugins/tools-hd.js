@@ -7,7 +7,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
 
   if (!/image\/(jpe?g|png)/i.test(mime)) {
     await conn.sendMessage(m.chat, { react: { text: '❗', key: m.key } })
-    return m.reply(`🫵 Envía o *responde a una imagen* con el comando:\n*${usedPrefix + command}*`)
+    return m.reply(`☁️` 𝙀𝙉𝙑𝙄𝘼 𝙊 𝙍𝙀𝙎𝙋𝙊𝙉𝘿𝙀 𝘼 𝙐𝙉𝘼 𝙄𝙈𝘼𝙂𝙀𝙉 𝙋𝘼𝙍𝘼 𝙈𝙀𝙅𝙊𝙍𝘼𝙍 𝙇𝘼 𝘾𝘼𝙇𝙄𝘿𝘼𝘿)
   }
 
   try {
